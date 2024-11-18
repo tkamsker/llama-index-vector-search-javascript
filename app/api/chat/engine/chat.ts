@@ -3,6 +3,9 @@ import {
   BaseToolWithCall,
   LLMAgent,
   QueryEngineTool,
+  RetrieverQueryEngine,
+  Settings,
+  VectorStoreQueryMode,
 } from "llamaindex";
 import fs from "node:fs/promises";
 import path from "node:path";
@@ -20,7 +23,11 @@ export async function createChatEngine(documentIds?: string[], params?: any) {
     tools.push(
       new QueryEngineTool({
         queryEngine: index.asQueryEngine({
-          preFilters: generateFilters(documentIds || []),
+          similarityTopK: 5,
+          retriever: index.asRetriever({
+            mode: "semantic_hybrid" as any
+          }),
+          preFilters: generateFilters(documentIds || [])
         }),
         metadata: {
           name: "data_query_engine",
@@ -44,6 +51,7 @@ export async function createChatEngine(documentIds?: string[], params?: any) {
 
   const agent = new LLMAgent({
     tools,
+    verbose: true,
     systemPrompt: process.env.SYSTEM_PROMPT,
   }) as unknown as BaseChatEngine;
 

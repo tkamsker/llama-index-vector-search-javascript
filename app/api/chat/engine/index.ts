@@ -1,4 +1,4 @@
-import { SimpleDocumentStore, VectorStoreIndex } from "llamaindex";
+import { Settings, SimpleDocumentStore, VectorStoreIndex } from "llamaindex";
 import { storageContextFromDefaults } from "llamaindex/storage/StorageContext";
 
 export async function getDataSource(params?: any) {
@@ -7,6 +7,7 @@ export async function getDataSource(params?: any) {
     throw new Error("STORAGE_CACHE_DIR environment variable is required!");
   }
   const storageContext = await storageContextFromDefaults({
+    vectorStore: (Settings as any)._vectorStore,
     persistDir,
   });
 

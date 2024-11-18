@@ -7,7 +7,6 @@ import {
   DocumentGenerator,
   DocumentGeneratorParams,
 } from "./document-generator";
-import { DuckDuckGoSearchTool, DuckDuckGoToolParams } from "./duckduckgo";
 import {
   ExtractMissingCellsParams,
   ExtractMissingCellsTool,
@@ -49,9 +48,6 @@ const toolFactory: Record<string, ToolCreator> = {
       domain_headers,
     );
     return await openAPIActionTool.toToolFunctions();
-  },
-  duckduckgo: async (config: unknown) => {
-    return [new DuckDuckGoSearchTool(config as DuckDuckGoToolParams)];
   },
   img_gen: async (config: unknown) => {
     return [new ImgGeneratorTool(config as ImgGeneratorToolParams)];

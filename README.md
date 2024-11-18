@@ -1,4 +1,26 @@
-This is a [LlamaIndex](https://www.llamaindex.ai/) project using [Next.js](https://nextjs.org/) bootstrapped with [`create-llama`](https://github.com/run-llama/LlamaIndexTS/tree/main/packages/create-llama).
+This is a RAG sample app built with [LlamaIndex](https://www.llamaindex.ai/) and uses Azure AI Search Vector Store.
+
+## Prerequisites
+
+- Create an Azure AI Search instance (Basic SKU)
+- Create an Azure OpenAI instance
+- Create an `.env` file with the following variables:
+
+```
+AZURE_AI_SEARCH_ENDPOINT=https://<service-name>.search.windows.net
+AZURE_OPENAI_ENDPOINT=https://<service-name>.openai.azure.com/
+AZURE_OPENAI_EMBEDDING_DEPLOYMENT=text-embedding-ada-002
+AZURE_OPENAI_DEPLOYMENT=gpt-4
+AZURE_API_VERSION=2024-09-01-preview
+AZURE_SEARCH_INDEX_NAME=llamaindex-vector-search
+AZURE_AI_SEARCH_KEY=
+```
+
+Then, login to Azure:
+
+```
+az login
+```
 
 ## Getting Started
 
@@ -8,7 +30,7 @@ First, install the dependencies:
 npm install
 ```
 
-Second, generate the embeddings of the documents in the `./data` directory (if this folder exists - otherwise, skip this step):
+Next, generate the embeddings of the documents in the `./data` directory (if this folder exists - otherwise, skip this step):
 
 ```
 npm run generate

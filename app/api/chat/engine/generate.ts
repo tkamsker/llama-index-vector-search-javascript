@@ -1,4 +1,4 @@
-import { VectorStoreIndex } from "llamaindex";
+import { Settings, VectorStoreIndex } from "llamaindex";
 import { storageContextFromDefaults } from "llamaindex/storage/StorageContext";
 
 import * as dotenv from "dotenv";
@@ -25,19 +25,21 @@ async function generateDatasource() {
   }
   const ms = await getRuntime(async () => {
     const storageContext = await storageContextFromDefaults({
+      vectorStore: (Settings as any)._vectorStore,
       persistDir,
     });
     const documents = await getDocuments();
 
     await VectorStoreIndex.fromDocuments(documents, {
       storageContext,
+      logProgress: true,
     });
   });
   console.log(`Storage context successfully generated in ${ms / 1000}s.`);
 }
 
 (async () => {
-  initSettings();
+  await initSettings();
   await generateDatasource();
   console.log("Finished generating storage.");
 })();
