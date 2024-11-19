@@ -9,17 +9,13 @@ This is a RAG sample app built with [LlamaIndex](https://www.llamaindex.ai/) and
 ```
 AZURE_AI_SEARCH_ENDPOINT=https://<service-name>.search.windows.net
 AZURE_OPENAI_ENDPOINT=https://<service-name>.openai.azure.com/
+AZURE_AI_SEARCH_KEY=<you can find this in the Azure portal>
+OPENAI_API_KEY=<you can find this in the Azure portal>
+
 AZURE_OPENAI_EMBEDDING_DEPLOYMENT=text-embedding-ada-002
 AZURE_OPENAI_DEPLOYMENT=gpt-4
 AZURE_API_VERSION=2024-09-01-preview
 AZURE_SEARCH_INDEX_NAME=llamaindex-vector-search
-AZURE_AI_SEARCH_KEY=
-```
-
-Then, login to Azure:
-
-```
-az login
 ```
 
 ## Getting Started
@@ -43,8 +39,6 @@ npm run dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
 This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
 

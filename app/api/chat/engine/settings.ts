@@ -30,16 +30,20 @@ export const initSettings = async () => {
     );
   }
 
-  const credential = new DefaultAzureCredential();
-  const azureADTokenProvider = getBearerTokenProvider(credential, [
-    "https://cognitiveservices.azure.com/.default",
-    "https://search.azure.com/.default",
-  ]);
-
-  const azure = {
-    azureADTokenProvider,
+  const azure: any = {
     deployment: process.env.AZURE_OPENAI_DEPLOYMENT ?? "gpt-4",
   };
+
+  if (process.env.OPENAI_API_KEY) {
+    azure.apikey = process.env.OPENAI_API_KEY as string;
+  } else {
+    const credential = new DefaultAzureCredential();
+    const azureADTokenProvider = getBearerTokenProvider(credential, [
+      "https://cognitiveservices.azure.com/.default",
+      "https://search.azure.com/.default",
+    ]);
+    azure.azureADTokenProvider = azureADTokenProvider;
+  }
 
   // configure LLM model
   Settings.llm = new OpenAI({
@@ -58,44 +62,27 @@ export const initSettings = async () => {
 
   // FIXME: find an elegant way to share the same instance across the ingestion and
   // generation pipelines
-  (Settings as any)._vectorStore = new AzureAISearchVectorStore({
-    indexName:
-      process.env.AZURE_SEARCH_INDEX_NAME ?? "llamaindex-vector-search",
-    filterableMetadataFieldKeys:
-      [] as unknown as FilterableMetadataFieldKeysType,
+  (Settings as any).__AzureAISearchVectorStoreInstance__ =
+    new AzureAISearchVectorStore({
+      indexName:
+        process.env.AZURE_SEARCH_INDEX_NAME ?? "llamaindex-vector-search",
+      filterableMetadataFieldKeys:
+        [] as unknown as FilterableMetadataFieldKeysType,
 
-    // FIXME: import IndexManagement.CREATE_IF_NOT_EXISTS from 'llamaindex'
-    // indexManagement: IndexManagement.CREATE_IF_NOT_EXISTS,
-    indexManagement: "CreateIfNotExists" as IndexManagement,
-    idFieldKey: "id",
-    chunkFieldKey: "chunk",
-    embeddingFieldKey: "embedding",
-    metadataStringFieldKey: "metadata",
-    docIdFieldKey: "doc_id",
-    embeddingDimensionality: 1536,
-    // hiddenFieldKeys: ["embedding"],
-    languageAnalyzer: KnownAnalyzerNames.EnLucene,
-    // store vectors on disk
-    vectorAlgorithmType: KnownVectorSearchAlgorithmKind.ExhaustiveKnn,
+      // FIXME: import IndexManagement.CREATE_IF_NOT_EXISTS from 'llamaindex'
+      // indexManagement: IndexManagement.CREATE_IF_NOT_EXISTS,
+      indexManagement: "CreateIfNotExists" as IndexManagement,
+      idFieldKey: "id",
+      chunkFieldKey: "chunk",
+      embeddingFieldKey: "embedding",
+      metadataStringFieldKey: "metadata",
+      docIdFieldKey: "doc_id",
+      embeddingDimensionality: 1536,
+      languageAnalyzer: KnownAnalyzerNames.EnLucene,
+      // store vectors on disk
+      vectorAlgorithmType: KnownVectorSearchAlgorithmKind.ExhaustiveKnn,
 
-    // Optional: Set to "scalar" or "binary" if using HNSW
-    // compressionType: KnownVectorSearchCompressionKind.BinaryQuantization,
-  });
-
-  Settings.callbackManager.on("llm-tool-call", console.log);
-  Settings.callbackManager.on("llm-tool-result", console.log);
-  Settings.callbackManager.on("llm-stream", console.log);
-  Settings.callbackManager.on("chunking-start", console.log);
-  Settings.callbackManager.on("chunking-end", console.log);
-  Settings.callbackManager.on("node-parsing-start", console.log);
-  Settings.callbackManager.on("node-parsing-end", console.log);
-  Settings.callbackManager.on("query-start", console.log);
-  Settings.callbackManager.on("query-end", console.log);
-  Settings.callbackManager.on("synthesize-start", console.log);
-  Settings.callbackManager.on("synthesize-end", console.log);
-  Settings.callbackManager.on("retrieve-start", console.log);
-  Settings.callbackManager.on("retrieve-end", console.log);
-  Settings.callbackManager.on("agent-start", console.log);
-  Settings.callbackManager.on("agent-end", console.log);
-      
+      // Optional: Set to "scalar" or "binary" if using HNSW
+      // compressionType: KnownVectorSearchCompressionKind.BinaryQuantization,
+    });
 };

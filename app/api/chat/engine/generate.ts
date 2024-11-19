@@ -25,7 +25,7 @@ async function generateDatasource() {
   }
   const ms = await getRuntime(async () => {
     const storageContext = await storageContextFromDefaults({
-      vectorStore: (Settings as any)._vectorStore,
+      vectorStore: (Settings as any).__AzureAISearchVectorStoreInstance__,
       persistDir,
     });
     const documents = await getDocuments();

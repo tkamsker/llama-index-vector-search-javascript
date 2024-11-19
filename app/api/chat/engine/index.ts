@@ -7,7 +7,7 @@ export async function getDataSource(params?: any) {
     throw new Error("STORAGE_CACHE_DIR environment variable is required!");
   }
   const storageContext = await storageContextFromDefaults({
-    vectorStore: (Settings as any)._vectorStore,
+    vectorStore: (Settings as any).__AzureAISearchVectorStoreInstance__,
     persistDir,
   });
 
