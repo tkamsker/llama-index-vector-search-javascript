@@ -32,9 +32,9 @@ export async function runPipeline(
     console.log(
       "Got empty index, created new index with the uploaded documents",
     );
-    const persistDir = process.env.STORAGE_CACHE_DIR;
+    const persistDir = process.env.LLAMAINDEX_STORAGE_CACHE_DIR;
     if (!persistDir) {
-      throw new Error("STORAGE_CACHE_DIR environment variable is required!");
+      throw new Error("LLAMAINDEX_STORAGE_CACHE_DIR environment variable is required!");
     }
     const storageContext = await storageContextFromDefaults({
       vectorStore: (Settings as any)._vectorStor,

@@ -19,9 +19,9 @@ async function getRuntime(func: any) {
 async function generateDatasource() {
   console.log(`Generating storage context...`);
   // Split documents, create embeddings and store them in the storage context
-  const persistDir = process.env.STORAGE_CACHE_DIR;
+  const persistDir = process.env.LLAMAINDEX_STORAGE_CACHE_DIR;
   if (!persistDir) {
-    throw new Error("STORAGE_CACHE_DIR environment variable is required!");
+    throw new Error("LLAMAINDEX_STORAGE_CACHE_DIR environment variable is required!");
   }
   const ms = await getRuntime(async () => {
     const storageContext = await storageContextFromDefaults({

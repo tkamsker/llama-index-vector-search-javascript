@@ -51,7 +51,7 @@ export async function createChatEngine(documentIds?: string[], params?: any) {
   const agent = new LLMAgent({
     tools,
     verbose: true,
-    systemPrompt: process.env.SYSTEM_PROMPT,
+    systemPrompt: process.env.LLAMAINDEX_SYSTEM_PROMPT,
   }) as unknown as BaseChatEngine;
 
   return agent;
