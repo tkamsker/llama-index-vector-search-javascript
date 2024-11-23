@@ -1,16 +1,21 @@
-FROM node:20-alpine as build
+# syntax=docker/dockerfile:1
+
+# Use full image because we need node-gyp to build native dependencies
+FROM node:20 AS build
+
+RUN npm install -g pnpm@8.14.1 && npm cache clean --force
 
 WORKDIR /app
 
-# Install dependencies
 COPY package.json package-lock.* ./
-RUN npm install
+ADD app/lib ./app/lib
+RUN pnpm install
 
 # Build the application
 COPY . .
-RUN npm run build
+RUN pnpm build
 
 # ====================================
-FROM build as release
+FROM build AS release
 
 CMD ["npm", "run", "start"]

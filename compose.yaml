@@ -1,0 +1,8 @@
+services:
+  llamaindex:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    image: llamaindex
+    ports:
+      - "3000:3000"
