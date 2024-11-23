@@ -2,21 +2,11 @@ import { BaseToolWithCall } from "llamaindex";
 import { ToolsFactory } from "llamaindex/tools/ToolsFactory";
 import fs from "node:fs/promises";
 import path from "node:path";
-import { CodeGeneratorTool, CodeGeneratorToolParams } from "./code-generator";
 import {
   DocumentGenerator,
   DocumentGeneratorParams,
 } from "./document-generator";
-import {
-  ExtractMissingCellsParams,
-  ExtractMissingCellsTool,
-  FillMissingCellsParams,
-  FillMissingCellsTool,
-} from "./form-filling";
-import { ImgGeneratorTool, ImgGeneratorToolParams } from "./img-gen";
-import { InterpreterTool, InterpreterToolParams } from "./interpreter";
 import { OpenAPIActionTool } from "./openapi-action";
-import { WeatherTool, WeatherToolParams } from "./weather";
 
 type ToolCreator = (config: unknown) => Promise<BaseToolWithCall[]>;
 
@@ -32,12 +22,6 @@ export async function createTools(toolConfig: {
 }
 
 const toolFactory: Record<string, ToolCreator> = {
-  weather: async (config: unknown) => {
-    return [new WeatherTool(config as WeatherToolParams)];
-  },
-  interpreter: async (config: unknown) => {
-    return [new InterpreterTool(config as InterpreterToolParams)];
-  },
   "openapi_action.OpenAPIActionToolSpec": async (config: unknown) => {
     const { openapi_uri, domain_headers } = config as {
       openapi_uri: string;
@@ -49,20 +33,8 @@ const toolFactory: Record<string, ToolCreator> = {
     );
     return await openAPIActionTool.toToolFunctions();
   },
-  img_gen: async (config: unknown) => {
-    return [new ImgGeneratorTool(config as ImgGeneratorToolParams)];
-  },
-  artifact: async (config: unknown) => {
-    return [new CodeGeneratorTool(config as CodeGeneratorToolParams)];
-  },
   document_generator: async (config: unknown) => {
     return [new DocumentGenerator(config as DocumentGeneratorParams)];
-  },
-  form_filling: async (config: unknown) => {
-    return [
-      new ExtractMissingCellsTool(config as ExtractMissingCellsParams),
-      new FillMissingCellsTool(config as FillMissingCellsParams),
-    ];
   },
 };
 
