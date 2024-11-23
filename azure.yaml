@@ -1,0 +1,61 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/Azure/azure-dev/main/schemas/v1.0/azure.yaml.json
+
+name: llamaindex-azure-search-js
+metadata:
+    template: llamaindex-azure-search-js
+requiredVersions:
+    azd: ">= 1.10.0"
+services:
+    llamaindex:
+        project: .
+        host: containerapp
+        language: js
+        docker:
+          remoteBuild: false
+          path: Dockerfile
+        
+hooks:
+  postprovision:
+    windows:
+      shell: pwsh
+      run: |
+        azd env get-values > .env
+        ./infra/hooks/postprovision/generate.ps1
+    posix:
+      shell: sh
+      run: |
+        azd env get-values > .env
+        ./infra/hooks/postprovision/generate.sh
+      interactive: true
+      continueOnError: false
+
+pipeline:
+  variables:
+    - AZURE_OPENAI_SERVICE
+    - AZURE_OPENAI_RESOURCE_GROUP
+    - AZURE_OPENAI_REUSE_EXISTING
+    - AZURE_OPENAI_ENDPOINT
+    - AZURE_OPENAI_CHAT_DEPLOYMENT
+    - AZURE_OPENAI_CHAT_DEPLOYMENT_CAPACITY
+    - AZURE_OPENAI_EMB_DEPLOYMENT_CAPACITY
+    - AZURE_OPENAI_EMB_DIMENSIONS
+    - AZURE_AI_SEARCH_INDEX
+    - AZURE_AI_SEARCH_SEMANTIC_CONFIGURATION
+    - AZURE_AI_SEARCH_CHUNK_FIELD
+    - AZURE_AI_SEARCH_METADATA_FIELD
+    - AZURE_AI_SEARCH_DOC_ID_FIELD
+    - AZURE_AI_SEARCH_EMBEDDING_FIELD
+    - AZURE_AI_SEARCH_USE_VECTOR_QUERY
+    - AZURE_AI_SEARCH_SERVICE
+    - AZURE_AI_SEARCH_SERVICE_RESOURCE_GROUP
+    - AZURE_AI_SEARCH_SERVICE_LOCATION
+    - AZURE_AI_SEARCH_SERVICE_SKU
+    - AZURE_AI_SEARCH_SEMANTIC_RANKER
+    - AZURE_AI_SEARCH_REUSE_EXISTING
+    - AZURE_AI_SEARCH_ENDPOINT
+    - AZURE_STORAGE_ACCOUNT
+    - AZURE_STORAGE_RESOURCE_GROUP
+    - AZURE_STORAGE_SKU
+    - AZURE_CONTAINER_APP_NAME
+    - AZURE_LOG_ANALYTICS
+    - AZURE_CONTAINER_APPS_WORKLOAD_PROFILE

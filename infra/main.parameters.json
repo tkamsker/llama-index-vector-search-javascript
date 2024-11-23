@@ -1,0 +1,120 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "environmentName": {
+      "value": "${AZURE_ENV_NAME}"
+    },
+    "resourceGroupName": {
+      "value": "${AZURE_RESOURCE_GROUP}"
+    },
+    "location": {
+      "value": "${AZURE_LOCATION}"
+    },
+    "principalId": {
+      "value": "${AZURE_PRINCIPAL_ID}"
+    },
+    "openAiServiceLocation": {
+      "value": "${AZURE_OPENAI_SERVICE_LOCATION}"
+    },
+    "openAiServiceName": {
+      "value": "${AZURE_OPENAI_SERVICE}"
+    },
+    "openAiResourceGroupName": {
+      "value": "${AZURE_OPENAI_RESOURCE_GROUP}"
+    },
+    "reuseExistingOpenAi": {
+      "value": "${AZURE_OPENAI_REUSE_EXISTING=false}"
+    },
+    "openAiEndpoint": {
+      "value": "${AZURE_OPENAI_ENDPOINT}"
+    },
+    "openAiChatDeployment": {
+      "value": "${AZURE_OPENAI_CHAT_DEPLOYMENT}"
+    },
+    "openAiChatVoiceChoice": {
+      "value": "${AZURE_OPENAI_CHAT_VOICE_CHOICE=alloy}"
+    },
+    "searchIndexName": {
+      "value": "${AZURE_AI_SEARCH_INDEX=llamaindex-vector-search}"
+    },
+    "searchSemanticConfiguration":{
+      "value": "${AZURE_AI_SEARCH_SEMANTIC_CONFIGURATION=default}"
+    },
+    "searchChunkField": {
+      "value": "${AZURE_AI_SEARCH_CHUNK_FIELD=chunk}"
+    },
+    "searchMetadataField": {
+      "value": "${AZURE_AI_SEARCH_METADATA_FIELD=metadata}"
+    },
+    "searchDocIdField": {
+      "value": "${AZURE_AI_SEARCH_DOC_ID_FIELD=doc_id}"
+    },
+    "searchEmbeddingField": {
+      "value": "${AZURE_AI_SEARCH_EMBEDDING_FIELD=embedding}"
+    },
+    "searchIdField": {
+      "value": "${AZURE_AI_SEARCH_ID_FIELD=id}"
+    },
+    "searchUseVectorQuery": {
+      "value": "${AZURE_AI_SEARCH_USE_VECTOR_QUERY=true}"
+    },
+    "searchServiceName": {
+      "value": "${AZURE_AI_SEARCH_SERVICE}"
+    },
+    "searchServiceResourceGroupName": {
+      "value": "${AZURE_AI_SEARCH_SERVICE_RESOURCE_GROUP}"
+    },
+    "searchServiceLocation": {
+      "value": "${AZURE_AI_SEARCH_SERVICE_LOCATION}"
+    },
+    "searchServiceSkuName": {
+      "value": "${AZURE_AI_SEARCH_SERVICE_SKU=standard}"
+    },
+    "searchServiceSemanticRankerLevel": {
+      "value": "${AZURE_AI_SEARCH_SEMANTIC_RANKER=free}"
+    },
+    "reuseExistingSearch": {
+      "value": "${AZURE_AI_SEARCH_REUSE_EXISTING=false}"
+    },
+    "searchEndpoint": {
+      "value": "${AZURE_AI_SEARCH_ENDPOINT}"
+    },
+    "storageAccountName": {
+      "value": "${AZURE_STORAGE_ACCOUNT}"
+    },
+    "storageResourceGroupName": {
+      "value": "${AZURE_STORAGE_RESOURCE_GROUP}"
+    },
+    "storageSkuName": {
+      "value": "${AZURE_STORAGE_SKU=Standard_LRS}"
+    },
+    "backendServiceName": {
+      "value": "${AZURE_CONTAINER_APP_NAME}"
+    },
+    "chatDeploymentCapacity": {
+      "value": "${AZURE_OPENAI_CHAT_DEPLOYMENT_CAPACITY=1}"
+    },
+    "embeddingDeploymentCapacity": {
+      "value": "${AZURE_OPENAI_EMB_DEPLOYMENT_CAPACITY=30}"
+    },
+    "embeddingDimensions": {
+      "value": "${AZURE_OPENAI_EMB_DIMENSIONS}"
+    },
+    "logAnalyticsName": {
+      "value": "${AZURE_LOG_ANALYTICS}"
+    },
+    "runningOnGh": {
+      "value": "${GITHUB_ACTIONS}"
+    },
+    "runningOnAdo": {
+      "value": "${TF_BUILD}"
+    },
+    "webAppExists": {
+      "value": "${SERVICE_WEB_RESOURCE_EXISTS=false}"
+    },
+    "azureContainerAppsWorkloadProfile": {
+      "value": "${AZURE_CONTAINER_APPS_WORKLOAD_PROFILE=Consumption}"
+    }
+  }
+}
