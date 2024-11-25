@@ -101,6 +101,9 @@
     "embeddingDimensions": {
       "value": "${AZURE_OPENAI_EMB_DIMENSIONS}"
     },
+    "openAiApiVersion": {
+      "value": "${OPENAI_API_VERSION=2024-02-15-preview}"
+    },
     "logAnalyticsName": {
       "value": "${AZURE_LOG_ANALYTICS}"
     },

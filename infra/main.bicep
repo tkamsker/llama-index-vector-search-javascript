@@ -76,6 +76,7 @@ param openAiEndpoint string = ''
 param openAiChatDeployment string = ''
 param openAiChatVoiceChoice string = ''
 
+param llamaIndexFileserverUrlPrefix string = 'http://localhost/api/files'
 param llamaIndexCacheDir string = '.cache'
 param llamaIndexSystemPrompt string = '''
 you are an assistant. Always use data_query_engine to answer the user\'s questions, and query for documents from your data source
@@ -92,7 +93,7 @@ you are an assistant. Always use data_query_engine to answer the user\'s questio
   }
 })
 param openAiServiceLocation string
-
+param openAiApiVersion string = '2024-02-15-preview'
 param chatDeploymentCapacity int
 param embeddingDeploymentCapacity int
 
@@ -218,15 +219,17 @@ module acaBackend 'core/host/container-app-upsert.bicep' = {
       AZURE_OPENAI_ENDPOINT: reuseExistingOpenAi ? openAiEndpoint : openAi.outputs.endpoint
       AZURE_OPENAI_CHAT_DEPLOYMENT: reuseExistingOpenAi ? openAiChatDeployment : openAiDeployments[0].name
       AZURE_OPENAI_CHAT_VOICE_CHOICE: openAiChatVoiceChoice
+      // must be named exactly like this for the openai-node sdk to pick it up
+      OPENAI_API_VERSION: openAiApiVersion
       // CORS support, for frontends on other hosts
       RUNNING_IN_PRODUCTION: 'true'
       // For using managed identity to access Azure resources. See https://github.com/microsoft/azure-container-apps/issues/442
       AZURE_CLIENT_ID: acaIdentity.outputs.clientId
 
+      // LlamaIndex configurations
       // Location of the cache directory for the LlamaIndex to store embeddings and index data
       LLAMAINDEX_STORAGE_CACHE_DIR: llamaIndexCacheDir
-
-      // System prompt for the LlamaIndex
+      LLAMAINDEX_FILESERVER_URL_PREFIX: llamaIndexFileserverUrlPrefix
       LLAMAINDEX_SYSTEM_PROMPT: llamaIndexSystemPrompt
       DEBUG: 'true'
     }
@@ -408,11 +411,17 @@ module openAiRoleSearchService 'core/security/role.bicep' = if (!reuseExistingSe
   }
 }
 
+// /!\ Do not output AZURE_CLIENT_ID for local development!
+// If detected, it will be used to authenticate the user 
+// using a user-assigned managed identity on Azure.
+// However, this is not supported in local development.
+
 output AZURE_LOCATION string = location
 output AZURE_TENANT_ID string = tenantId
-output AZURE_CLIENT_ID string = acaIdentity.outputs.clientId
 output AZURE_RESOURCE_GROUP string = resourceGroup.name
 
+// must be named exactly like this for the openai-node sdk to pick it up
+output OPENAI_API_VERSION string = openAiApiVersion
 output AZURE_OPENAI_ENDPOINT string = reuseExistingOpenAi ? openAiEndpoint : openAi.outputs.endpoint
 output AZURE_OPENAI_CHAT_DEPLOYMENT string = reuseExistingOpenAi
   ? openAiChatDeployment
@@ -444,3 +453,4 @@ output AZURE_CONTAINER_REGISTRY_ENDPOINT string = containerApps.outputs.registry
 
 output LLAMAINDEX_STORAGE_CACHE_DIR string = llamaIndexCacheDir
 output LLAMAINDEX_SYSTEM_PROMPT string = llamaIndexSystemPrompt
+output LLAMAINDEX_FILESERVER_URL_PREFIX string = llamaIndexFileserverUrlPrefix
