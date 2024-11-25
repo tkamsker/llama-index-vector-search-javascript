@@ -103,29 +103,29 @@ export function createCallbackManager(stream: StreamData) {
 }
 
 function getNodeUrl(metadata: Metadata) {
-  if (!process.env.FILESERVER_URL_PREFIX) {
+  if (!process.env.LLAMAINDEX_FILESERVER_URL_PREFIX) {
     console.warn(
-      "FILESERVER_URL_PREFIX is not set. File URLs will not be generated.",
+      "LLAMAINDEX_FILESERVER_URL_PREFIX is not set. File URLs will not be generated.",
     );
   }
   const fileName = metadata["file_name"];
-  if (fileName && process.env.FILESERVER_URL_PREFIX) {
+  if (fileName && process.env.LLAMAINDEX_FILESERVER_URL_PREFIX) {
     // file_name exists and file server is configured
     const pipelineId = metadata["pipeline_id"];
     if (pipelineId) {
       const name = toDownloadedName(pipelineId, fileName);
-      return `${process.env.FILESERVER_URL_PREFIX}/${LLAMA_CLOUD_DOWNLOAD_FOLDER}/${name}`;
+      return `${process.env.LLAMAINDEX_FILESERVER_URL_PREFIX}/${LLAMA_CLOUD_DOWNLOAD_FOLDER}/${name}`;
     }
     const isPrivate = metadata["private"] === "true";
     if (isPrivate) {
-      return `${process.env.FILESERVER_URL_PREFIX}/output/uploaded/${fileName}`;
+      return `${process.env.LLAMAINDEX_FILESERVER_URL_PREFIX}/output/uploaded/${fileName}`;
     }
     const filePath = metadata["file_path"];
     const dataDir = path.resolve(DATA_DIR);
 
     if (filePath && dataDir) {
       const relativePath = path.relative(dataDir, filePath);
-      return `${process.env.FILESERVER_URL_PREFIX}/data/${relativePath}`;
+      return `${process.env.LLAMAINDEX_FILESERVER_URL_PREFIX}/data/${relativePath}`;
     }
   }
   // fallback to URL in metadata (e.g. for websites)

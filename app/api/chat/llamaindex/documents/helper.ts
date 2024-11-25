@@ -81,8 +81,8 @@ export async function saveDocument(filepath: string, content: string | Buffer) {
   if (path.isAbsolute(filepath)) {
     throw new Error("Absolute file paths are not allowed.");
   }
-  if (!process.env.FILESERVER_URL_PREFIX) {
-    throw new Error("FILESERVER_URL_PREFIX environment variable is not set.");
+  if (!process.env.LLAMAINDEX_FILESERVER_URL_PREFIX) {
+    throw new Error("LLAMAINDEX_FILESERVER_URL_PREFIX environment variable is not set.");
   }
 
   const dirPath = path.dirname(filepath);
@@ -94,7 +94,7 @@ export async function saveDocument(filepath: string, content: string | Buffer) {
     await fs.promises.writeFile(filepath, content);
   }
 
-  const fileurl = `${process.env.FILESERVER_URL_PREFIX}/${filepath}`;
+  const fileurl = `${process.env.LLAMAINDEX_FILESERVER_URL_PREFIX}/${filepath}`;
   console.log(`Saved document to ${filepath}. Reachable at URL: ${fileurl}`);
   return fileurl;
 }

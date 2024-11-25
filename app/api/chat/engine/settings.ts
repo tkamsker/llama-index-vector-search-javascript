@@ -48,11 +48,11 @@ export const initSettings = async () => {
     console.log("Using OpenAI API key for authentication");
   }
 
-  if (process.env.AZURE_AI_SEARCH_API_KEY) {
+  if (process.env.AZURE_AI_SEARCH_KEY) {
     // Authenticate using an Azure AI Search API key
     // This is generally discouraged, but is provided for developers
     // that want to develop locally inside the Docker container.
-    azureSearchApiKey = process.env.AZURE_AI_SEARCH_API_KEY;
+    azureSearchApiKey = process.env.AZURE_AI_SEARCH_KEY;
   }
 
   if (process.env.AZURE_CLIENT_ID) {
@@ -98,22 +98,32 @@ export const initSettings = async () => {
 
   // FIXME: find an elegant way to share the same instance across the ingestion and
   // generation pipelines
+
+  const endpoint = process.env.AZURE_AI_SEARCH_ENDPOINT;
+  const indexName = process.env.AZURE_AI_SEARCH_INDEX ?? "llamaindex-vector-search";
+  const idFieldKey = process.env.AZURE_AI_SEARCH_ID_FIELD ?? "id";
+  const chunkFieldKey = process.env.AZURE_AI_SEARCH_CHUNK_FIELD ?? "chunk";
+  const embeddingFieldKey = process.env.AZURE_AI_SEARCH_EMBEDDING_FIELD ?? "embedding";
+  const metadataStringFieldKey = process.env.AZURE_AI_SEARCH_METADATA_FIELD ?? "metadata";
+  const docIdFieldKey = process.env.AZURE_AI_SEARCH_DOC_ID_FIELD ?? "doc_id";
+
+  console.log("Initializing Azure AI Search Vector Store");
+
   (Settings as any).__AzureAISearchVectorStoreInstance__ =
     new AzureAISearchVectorStore({
+      // credential: credential as unknown as DefaultAzureCredential,
       key: azureSearchApiKey,
-      credential: credential as unknown as DefaultAzureCredential,
-      indexName:
-        process.env.AZURE_AI_SEARCH_INDEX ?? "llamaindex-vector-search",
+      endpoint,
+      indexName,
+      idFieldKey,
+      chunkFieldKey,
+      embeddingFieldKey,
+      metadataStringFieldKey,
+      docIdFieldKey,
+      serviceApiVersion: "2024-09-01-preview",
       // FIXME: import IndexManagement.CREATE_IF_NOT_EXISTS from 'llamaindex'
       // indexManagement: IndexManagement.CREATE_IF_NOT_EXISTS,
       indexManagement: "CreateIfNotExists" as IndexManagement,
-      idFieldKey: process.env.AZURE_AI_SEARCH_ID_FIELD ?? "id",
-      chunkFieldKey: process.env.AZURE_AI_SEARCH_CHUNK_FIELD ?? "chunk",
-      embeddingFieldKey:
-        process.env.AZURE_AI_SEARCH_EMBEDDING_FIELD ?? "embedding",
-      metadataStringFieldKey:
-        process.env.AZURE_AI_SEARCH_METADATA_FIELD ?? "metadata",
-      docIdFieldKey: process.env.AZURE_AI_SEARCH_DOC_ID_FIELD ?? "doc_id",
       embeddingDimensionality: 3072,
       languageAnalyzer: KnownAnalyzerNames.EnLucene,
       // store vectors on disk

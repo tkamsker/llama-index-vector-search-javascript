@@ -47,11 +47,12 @@ export async function createChatEngine(documentIds?: string[], params?: any) {
   if (toolConfig) {
     tools.push(...(await createTools(toolConfig)));
   }
+  const systemPrompt = process.env.LLAMAINDEX_SYSTEM_PROMPT;
 
   const agent = new LLMAgent({
     tools,
     verbose: true,
-    systemPrompt: process.env.LLAMAINDEX_SYSTEM_PROMPT,
+    systemPrompt,
   }) as unknown as BaseChatEngine;
 
   return agent;

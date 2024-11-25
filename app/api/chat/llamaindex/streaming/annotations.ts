@@ -106,7 +106,7 @@ function retrieveAgentHistoryMessage(
 function getFileContent(file: DocumentFile): string {
   let defaultContent = `=====File: ${file.name}=====\n`;
   // Include file URL if it's available
-  const urlPrefix = process.env.FILESERVER_URL_PREFIX;
+  const urlPrefix = process.env.LLAMAINDEX_FILESERVER_URL_PREFIX;
   let urlContent = "";
   if (urlPrefix) {
     if (file.url) {
@@ -116,7 +116,7 @@ function getFileContent(file: DocumentFile): string {
     }
   } else {
     console.warn(
-      "Warning: FILESERVER_URL_PREFIX not set in environment variables. Can't use file server",
+      "Warning: LLAMAINDEX_FILESERVER_URL_PREFIX not set in environment variables. Can't use file server",
     );
   }
   defaultContent += urlContent;
