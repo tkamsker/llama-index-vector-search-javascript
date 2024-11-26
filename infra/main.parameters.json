@@ -29,8 +29,23 @@
     "openAiEndpoint": {
       "value": "${AZURE_OPENAI_ENDPOINT}"
     },
+    "openAiChatSkuName": {
+      "value": "${AZURE_OPENAI_CHAT_DEPLOYMENT_SKU=Standard}"
+    },
+    "openAiEmbedSkuName": {
+      "value": "${AZURE_OPENAI_EMD_DEPLOYMENT_SKU=Standard}"
+    },
+    "openAiChatModel": {
+      "value": "${AZURE_OPENAI_CHAT_MODEL=gpt-4}"
+    },
+    "openAiEmbedModel": {
+      "value": "${AZURE_OPENAI_EMB_MODEL_NAME=text-embedding-3-large}"
+    },
+    "openAiChatDeploymentVersion": {
+      "value": "${AZURE_OPENAI_CHAT_DEPLOYMENT_VERSION=turbo-2024-04-09}"
+    },
     "openAiChatDeployment": {
-      "value": "${AZURE_OPENAI_CHAT_DEPLOYMENT}"
+      "value": "${AZURE_OPENAI_CHAT_DEPLOYMENT=gpt-4}"
     },
     "openAiChatVoiceChoice": {
       "value": "${AZURE_OPENAI_CHAT_VOICE_CHOICE=alloy}"
@@ -74,6 +89,9 @@
     "searchServiceSemanticRankerLevel": {
       "value": "${AZURE_AI_SEARCH_SEMANTIC_RANKER=free}"
     },
+    "searchServiceSemanticSkuName": {
+      "value": "${AZURE_SEARCH_SERVICE_SKU=basic}"
+    },
     "reuseExistingSearch": {
       "value": "${AZURE_AI_SEARCH_REUSE_EXISTING=false}"
     },
@@ -97,9 +115,6 @@
     },
     "embeddingDeploymentCapacity": {
       "value": "${AZURE_OPENAI_EMB_DEPLOYMENT_CAPACITY=30}"
-    },
-    "embeddingDimensions": {
-      "value": "${AZURE_OPENAI_EMB_DIMENSIONS}"
     },
     "openAiApiVersion": {
       "value": "${OPENAI_API_VERSION=2024-02-15-preview}"

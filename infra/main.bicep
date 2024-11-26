@@ -51,8 +51,9 @@ param searchServiceLocation string = ''
 @allowed(['free', 'basic', 'standard', 'standard2', 'standard3', 'storage_optimized_l1', 'storage_optimized_l2'])
 param searchServiceSkuName string
 param searchIndexName string
+param searchServiceReplicaCount int = 1
 param searchSemanticConfiguration string
-param searchServiceSemanticRankerLevel string
+param searchServiceSemanticRankerLevel string = 'disabled'
 var actualSearchServiceSemanticRankerLevel = (searchServiceSkuName == 'free')
   ? 'disabled'
   : searchServiceSemanticRankerLevel
@@ -67,14 +68,22 @@ param storageAccountName string = ''
 param storageResourceGroupName string = ''
 param storageResourceGroupLocation string = location
 param storageContainerName string = 'content'
-param storageSkuName string
+param storageSkuName string = 'Standard_LRS'
 
 param reuseExistingOpenAi bool = false
 param openAiServiceName string = ''
 param openAiResourceGroupName string = ''
 param openAiEndpoint string = ''
-param openAiChatDeployment string = ''
-param openAiChatVoiceChoice string = ''
+param openAiChatDeployment string = 'gpt-4'
+param openAiChatModel string = 'gpt-4'
+param openAiChatDeploymentVersion string = 'turbo-2024-04-09'
+param openAiEmbedModel string = 'text-embedding-3-large'
+param openAiEmbedModelVersion string = '1'
+param openAiChatVoiceChoice string = 'alloy'
+param openAiChatSkuName string = 'Standard'
+param openAiEmbedSkuName string = 'Standard'
+param chatDeploymentCapacity int = 1
+param openAiEmbeddingDeploymentCapacity int = 30
 
 param llamaIndexFileserverUrlPrefix string = 'http://localhost/api/files'
 param llamaIndexCacheDir string = '.cache'
@@ -94,8 +103,6 @@ you are an assistant. Always use data_query_engine to answer the user\'s questio
 })
 param openAiServiceLocation string
 param openAiApiVersion string = '2024-02-15-preview'
-param chatDeploymentCapacity int
-param embeddingDeploymentCapacity int
 
 param tenantId string = tenant().tenantId
 
@@ -236,30 +243,29 @@ module acaBackend 'core/host/container-app-upsert.bicep' = {
   }
 }
 
-var embedModel = 'text-embedding-3-large'
 var openAiDeployments = [
   {
-    name: 'gpt-4'
+    name: openAiChatModel
     model: {
       format: 'OpenAI'
-      name: 'gpt-4'
-      version: 'turbo-2024-04-09'
+      name: openAiChatModel
+      version: openAiChatDeploymentVersion
     }
     sku: {
-      name: 'GlobalStandard'
+      name: openAiChatSkuName
       capacity: chatDeploymentCapacity
     }
   }
   {
-    name: embedModel
+    name: openAiEmbedModel
     model: {
       format: 'OpenAI'
-      name: embedModel
-      version: '1'
+      name: openAiEmbedModel
+      version: openAiEmbedModelVersion
     }
     sku: {
-      name: 'Standard'
-      capacity: embeddingDeploymentCapacity
+      name: openAiEmbedSkuName
+      capacity: openAiEmbeddingDeploymentCapacity
     }
   }
 ]
@@ -279,7 +285,9 @@ module openAi 'br/public:avm/res/cognitive-services/account:0.8.0' = if (!reuseE
     deployments: openAiDeployments
     disableLocalAuth: true
     publicNetworkAccess: 'Enabled'
-    networkAcls: {}
+    networkAcls: {
+      defaultAction: 'Allow'
+    }
     roleAssignments: [
       {
         roleDefinitionIdOrName: 'Cognitive Services OpenAI User'
@@ -299,7 +307,7 @@ module searchService 'br/public:avm/res/search/search-service:0.7.1' = if (!reus
     tags: tags
     disableLocalAuth: true
     sku: searchServiceSkuName
-    replicaCount: 1
+    replicaCount: searchServiceReplicaCount
     semanticSearch: actualSearchServiceSemanticRankerLevel
     // An outbound managed identity is required for integrated vectorization to work,
     // and is only supported on non-free tiers:
@@ -427,8 +435,9 @@ output AZURE_OPENAI_CHAT_DEPLOYMENT string = reuseExistingOpenAi
   ? openAiChatDeployment
   : openAiDeployments[0].name
 output AZURE_OPENAI_CHAT_VOICE_CHOICE string = openAiChatVoiceChoice
-output AZURE_OPENAI_EMBEDDING_DEPLOYMENT string = embedModel
-output AZURE_OPENAI_EMBEDDING_MODEL string = embedModel
+output AZURE_OPENAI_EMBEDDING_DEPLOYMENT string = openAiEmbedModel
+output AZURE_OPENAI_EMBEDDING_MODEL string = openAiEmbedModel
+output AZURE_OPENAI_CHATGPT_MODEL string = openAiChatModel
 
 output AZURE_AI_SEARCH_ENDPOINT string = reuseExistingSearch
   ? searchEndpoint

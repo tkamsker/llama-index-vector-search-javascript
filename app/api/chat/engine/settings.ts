@@ -8,12 +8,7 @@ import {
   KnownVectorSearchAlgorithmKind,
 } from "@azure/search-documents";
 
-import {
-  FilterableMetadataFieldKeysType,
-  OpenAI,
-  OpenAIEmbedding,
-  Settings,
-} from "llamaindex";
+import { OpenAI, OpenAIEmbedding, Settings } from "llamaindex";
 
 // FIXME: import from 'llamaindex'
 import {
@@ -37,25 +32,24 @@ export const initSettings = async () => {
   }
 
   let credential;
-  let openAiApiKey;
-  let azureSearchApiKey;
+  const azureAiSearchVectorStoreAuth: {
+    key?: string;
+    credential?: DefaultAzureCredential | ManagedIdentityCredential;
+  } = {};
+  const openAiConfig: {
+    apiKey?: string;
+    deployment?: string;
+    model?: string;
+    azure?: Record<string, string | CallableFunction>;
+  } = {};
 
   if (process.env.OPENAI_API_KEY) {
     // Authenticate using an Azure OpenAI API key
     // This is generally discouraged, but is provided for developers
     // that want to develop locally inside the Docker container.
-    openAiApiKey = process.env.OPENAI_API_KEY;
+    openAiConfig.apiKey = process.env.OPENAI_API_KEY;
     console.log("Using OpenAI API key for authentication");
-  }
-
-  if (process.env.AZURE_AI_SEARCH_KEY) {
-    // Authenticate using an Azure AI Search API key
-    // This is generally discouraged, but is provided for developers
-    // that want to develop locally inside the Docker container.
-    azureSearchApiKey = process.env.AZURE_AI_SEARCH_KEY;
-  }
-
-  if (process.env.AZURE_CLIENT_ID) {
+  } else if (process.env.AZURE_CLIENT_ID) {
     // Authenticate using a user-assigned managed identity on Azure
     // See infra/main.bicep for value of AZURE_OPENAI_CLIENT_ID
     credential = new ManagedIdentityCredential({
@@ -71,26 +65,41 @@ export const initSettings = async () => {
     console.log("Using default Azure credential chain for authentication");
   }
 
-  const azureADTokenProvider = getBearerTokenProvider(
-    credential,
-    AZURE_COGNITIVE_SERVICES_SCOPE,
-  );
-  const azure = {
-    azureADTokenProvider,
-    deployment: process.env.AZURE_OPENAI_CHAT_DEPLOYMENT,
-  };
+  if (credential) {
+    const azureADTokenProvider = getBearerTokenProvider(
+      credential,
+      AZURE_COGNITIVE_SERVICES_SCOPE,
+    );
+    openAiConfig.azure = {
+      azureADTokenProvider,
+      deployment: process.env.AZURE_OPENAI_CHAT_DEPLOYMENT,
+    };
+
+    azureAiSearchVectorStoreAuth.credential = credential;
+  }
+
+  if (process.env.AZURE_AI_SEARCH_KEY) {
+    // Authenticate using an Azure AI Search API key
+    // This is generally discouraged, but is provided for developers
+    // that want to develop locally inside the Docker container.
+    azureAiSearchVectorStoreAuth.key = process.env.AZURE_AI_SEARCH_KEY;
+  }
 
   // configure LLM model
   Settings.llm = new OpenAI({
-    apiKey: openAiApiKey,
-    azure,
+    ...openAiConfig,
+    model: process.env.AZURE_OPENAI_CHAT_DEPLOYMENT,
   });
+  console.log({ openAiConfig });
 
   // configure embedding model
-  azure.deployment = process.env.AZURE_OPENAI_EMBEDDING_DEPLOYMENT;
   Settings.embedModel = new OpenAIEmbedding({
+    ...openAiConfig,
     model: process.env.AZURE_OPENAI_EMBEDDING_DEPLOYMENT,
-    azure,
+    azure: {
+      ...openAiConfig.azure,
+      deployment: process.env.AZURE_OPENAI_EMBEDDING_DEPLOYMENT,
+    }
   });
 
   Settings.chunkSize = CHUNK_SIZE;
@@ -100,19 +109,22 @@ export const initSettings = async () => {
   // generation pipelines
 
   const endpoint = process.env.AZURE_AI_SEARCH_ENDPOINT;
-  const indexName = process.env.AZURE_AI_SEARCH_INDEX ?? "llamaindex-vector-search";
+  const indexName =
+    process.env.AZURE_AI_SEARCH_INDEX ?? "llamaindex-vector-search";
   const idFieldKey = process.env.AZURE_AI_SEARCH_ID_FIELD ?? "id";
   const chunkFieldKey = process.env.AZURE_AI_SEARCH_CHUNK_FIELD ?? "chunk";
-  const embeddingFieldKey = process.env.AZURE_AI_SEARCH_EMBEDDING_FIELD ?? "embedding";
-  const metadataStringFieldKey = process.env.AZURE_AI_SEARCH_METADATA_FIELD ?? "metadata";
+  const embeddingFieldKey =
+    process.env.AZURE_AI_SEARCH_EMBEDDING_FIELD ?? "embedding";
+  const metadataStringFieldKey =
+    process.env.AZURE_AI_SEARCH_METADATA_FIELD ?? "metadata";
   const docIdFieldKey = process.env.AZURE_AI_SEARCH_DOC_ID_FIELD ?? "doc_id";
 
   console.log("Initializing Azure AI Search Vector Store");
 
   (Settings as any).__AzureAISearchVectorStoreInstance__ =
     new AzureAISearchVectorStore({
-      // credential: credential as unknown as DefaultAzureCredential,
-      key: azureSearchApiKey,
+      // Use either a key or a credential based on the environment
+      ...azureAiSearchVectorStoreAuth,
       endpoint,
       indexName,
       idFieldKey,
