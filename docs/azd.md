@@ -72,7 +72,7 @@ To troubleshoot any issues, see [troubleshooting](#troubleshooting).
 
 ### Configure environment variables for running services
 
-Configure environment variables for running services by updating `settings` in [main.parameters.json](./infra/main.parameters.json).
+Configure environment variables for running services by updating `settings` in [main.parameters.json](../infra/main.parameters.json).
 
 ### Configure CI/CD pipeline
 

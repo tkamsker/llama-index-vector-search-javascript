@@ -31,6 +31,10 @@ This template, the application code and configuration it contains, has been buil
 
 ## Table of Contents
 
+- [LlamaIndex RAG chat app with Azure OpenAI and Azure AI Search (JavaScript)](#llamaindex-rag-chat-app-with-azure-openai-and-azure-ai-search-javascript)
+- [Important Security Notice](#important-security-notice)
+- [Table of Contents](#table-of-contents)
+  - [Architecture Diagram](#architecture-diagram)
 - [Azure account requirements](#azure-account-requirements)
   - [Cost estimation](#cost-estimation)
 - [Getting Started](#getting-started)
@@ -40,6 +44,7 @@ This template, the application code and configuration it contains, has been buil
 - [Deploying](#deploying)
   - [Deploying again](#deploying-again)
 - [Running the development server](#running-the-development-server)
+  - [Using Docker (optional)](#using-docker-optional)
 - [Using the app](#using-the-app)
 - [Clean up](#clean-up)
 - [Guidance](#guidance)
@@ -58,7 +63,7 @@ The repo includes sample data so it's ready to try end to end. In this sample ap
 
 - **Azure account**. If you're new to Azure, [get an Azure account for free](https://azure.microsoft.com/free/cognitive-search/) and you'll get some free Azure credits to get started.
 - **Azure account permissions**:
-  - Your Azure account must have `Microsoft.Authorization/roleAssignments/write` permissions, such as [Role Based Access Control Administrator](https://learn.microsoft.com/azure/role-based-access-control/built-in-roles#role-based-access-control-administrator-preview), [User Access Administrator](https://learn.microsoft.com/azure/role-based-access-control/built-in-roles#user-access-administrator), or [Owner](https://learn.microsoft.com/azure/role-based-access-control/built-in-roles#owner). If you don't have subscription-level permissions, you must be granted [RBAC](https://learn.microsoft.com/azure/role-based-access-control/built-in-roles#role-based-access-control-administrator-preview) for an existing resource group and [deploy to that existing group](docs/deploy_existing.md#resource-group).
+  - Your Azure account must have `Microsoft.Authorization/roleAssignments/write` permissions, such as [Role Based Access Control Administrator](https://learn.microsoft.com/azure/role-based-access-control/built-in-roles#role-based-access-control-administrator-preview), [User Access Administrator](https://learn.microsoft.com/azure/role-based-access-control/built-in-roles#user-access-administrator), or [Owner](https://learn.microsoft.com/azure/role-based-access-control/built-in-roles#owner). If you don't have subscription-level permissions, you must be granted [RBAC](https://learn.microsoft.com/azure/role-based-access-control/built-in-roles#role-based-access-control-administrator-preview) for an existing resource group and deploy to that existing group.
   - Your Azure account also needs `Microsoft.Resources/deployments/write` permissions on the subscription level.
 
 ### Cost estimation
@@ -67,14 +72,14 @@ Pricing varies per region and usage, so it isn't possible to predict exact costs
 However, you can try the [Azure pricing calculator](https://azure.com/e/a87a169b256e43c089015fda8182ca87) for the resources below.
 
 * Azure Container Apps: Consumption plan with 1 CPU core, 2.0 GB RAM. Pricing with Pay-as-You-Go. [Pricing](https://azure.microsoft.com/pricing/details/container-apps/)
-* Azure OpenAI: Standard tier, gpt-4 and text-embedding-3-large models. Pricing per 1K tokens used. [Pricing](https://azure.microsoft.com/pricing/details/cognitive-services/openai-service/)
+* Azure OpenAI: Standard tier, gpt-4o-mini and text-embedding-3-large models. Pricing per 1K tokens used. [Pricing](https://azure.microsoft.com/pricing/details/cognitive-services/openai-service/)
 * Azure AI Search: Standard tier, 1 replica, free level of semantic search. Pricing per hour. [Pricing](https://azure.microsoft.com/pricing/details/search/)
 * Azure Blob Storage: Standard tier with ZRS (Zone-redundant storage). Pricing per storage and read operations. [Pricing](https://azure.microsoft.com/pricing/details/storage/blobs/)
 * Azure Monitor: Pay-as-you-go tier. Costs based on data ingested. [Pricing](https://azure.microsoft.com/pricing/details/monitor/)
 
 To reduce costs, you can switch to free SKUs for various services, but those SKUs have limitations.
 
- To avoid unnecessary costs, remember to take down your app if it's no longer in use,
+To avoid unnecessary costs, remember to take down your app if it's no longer in use,
 either by deleting the resource group in the Portal or running `azd down`.
 
 ## Getting Started
@@ -114,46 +119,61 @@ A related option is VS Code Dev Containers, which will open the project in your 
 2. Create a new folder and switch to it in the terminal.
 3. Run this command to download the project code:
 
-    ```shell
-    azd init -t llamaindex-search-javascript
-    ```
+```shell
+azd init -t llamaindex-search-javascript
+```
 
-Note that this command will initialize a git repository, so you do not need to clone this repository.
+> [!NOTE] 
+> This command will initialize a git repository, so you do not need to clone this repository.
 
 ## Deploying
 
 The steps below will provision Azure resources and deploy the application code to Azure Container Apps.
 
-1. Login to your Azure account:
+Login to your Azure account:
 
-    ```shell
-    azd auth login
-    ```
+```shell
+azd auth login
+```
 
-    For GitHub Codespaces users, if the previous command fails, try:
+For GitHub Codespaces users, if the previous command fails, try:
 
-   ```shell
-    azd auth login --use-device-code
-    ```
+```shell
+azd auth login --use-device-code
+```
 
-1. Create a new azd environment:
+Create a new azd environment:
 
-    ```shell
-    azd env new
-    ```
+```shell
+azd env new
+```
 
-    Enter a name that will be used for the resource group.
-    This will create a new folder in the `.azure` folder, and set it as the active environment for any calls to `azd` going forward.
-1. Run `azd up` - This will provision Azure resources and deploy this sample to those resources, including building the search index based on the files found in the `./data` folder.
-    - **Important**: Beware that the resources created by this command will incur immediate costs, primarily from the AI Search resource. These resources may accrue costs even if you interrupt the command before it is fully executed. You can run `azd down` or delete the resources manually to avoid unnecessary spending.
-    - You will be prompted to select two locations, one for the majority of resources and one for the OpenAI resource, which is currently a short list. That location list is based on the [OpenAI model availability table](https://learn.microsoft.com/azure/cognitive-services/openai/concepts/models#model-summary-table-and-region-availability) and may become outdated as availability changes.
-1. After the application has been successfully deployed you will see a URL printed to the console.  Click that URL to interact with the application in your browser.
+Enter a name that will be used for the resource group.
+This will create a new folder in the `.azure` folder, and set it as the active environment for any calls to `azd` going forward.
+
+Package, provision and deploy this project to Azure:
+
+```shell
+azd up
+```
+
+> [!NOTE]
+> This will provision Azure resources and deploy this sample to those resources, including building the search index based on the files found in the ./data folder.
+
+After the application has been successfully deployed you will see a URL printed to the console.  Click that URL to interact with the application in your browser.
 
 It will look like the following:
 
 !['Output from running azd up'](docs/images/llamaindex-search-javascript-endpoint.png)
 
-> NOTE: It may take 5-10 minutes after you see 'SUCCESS' for the application to be fully deployed.
+> [!NOTE]
+> It may take 5-10 minutes after you see 'SUCCESS' for the application to be fully deployed.
+
+> [!IMPORTANT]
+> Beware that the resources created by this command will incur immediate costs, primarily from the AI Search resource. These resources may accrue costs even if you interrupt the command before it is fully executed. You can run `azd down` or delete the resources manually to avoid unnecessary spending.
+>
+> You will be prompted to select two locations, one for the majority of resources and one for the OpenAI resource, which is currently a short list. That location list is based on the [OpenAI model availability table](https://learn.microsoft.com/azure/cognitive-services/openai/concepts/models#model-summary-table-and-region-availability) and may become outdated as availability changes.
+
 
 ### Deploying again
 
@@ -248,7 +268,7 @@ NOTE: you can also run `azd down --purge --force`.
 
 The resource group and all the resources will be deleted.
 
-# Guidance
+## Guidance
 
 You can find extensive documentation in the [docs](docs/README.md) folder:
 

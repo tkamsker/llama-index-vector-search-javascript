@@ -4,9 +4,13 @@ This sample is designed to be a starting point for your own production applicati
 but you should do a thorough review of the security and performance before deploying
 to production. Here are some things to consider:
 
-* [Azure resource configuration](#azure-resource-configuration)
-* [Additional security measures](#additional-security-measures)
-* [Evaluation](#evaluation)
+- [Release to Production](#release-to-production)
+  - [Azure resource configuration](#azure-resource-configuration)
+    - [OpenAI Capacity](#openai-capacity)
+    - [Azure Storage](#azure-storage)
+    - [Azure AI Search](#azure-ai-search)
+  - [Additional security measures](#additional-security-measures)
+  - [Evaluation](#evaluation)
 
 ## Azure resource configuration
 
@@ -41,25 +45,25 @@ After 1000 queries, you will get an error message about exceeding the semantic r
 * Assuming your app will experience more than 1000 questions per month,
   you should upgrade the semantic ranker SKU from "free" to "standard" SKU:
 
-  ```shell
-  azd env set AZURE_SEARCH_SEMANTIC_RANKER standard
-  ```
+```shell
+azd env set AZURE_SEARCH_SEMANTIC_RANKER standard
+```
 
-  Or disable semantic search entirely:
+Or disable semantic search entirely:
 
-  ```shell
-  azd env set AZURE_SEARCH_SEMANTIC_RANKER disabled
-  ```
+```shell
+azd env set AZURE_SEARCH_SEMANTIC_RANKER disabled
+```
 
 * The search service can handle fairly large indexes, but it does have per-SKU limits on storage sizes, maximum vector dimensions, etc. You may want to upgrade the SKU to either a Standard or Storage Optimized SKU, depending on your expected load.
 However, you [cannot change the SKU](https://learn.microsoft.com/azure/search/search-sku-tier#tier-upgrade-or-downgrade) of an existing search service, so you will need to re-index the data or manually copy it over.
 You can change the SKU by setting the `AZURE_SEARCH_SERVICE_SKU` azd environment variable to [an allowed SKU](https://learn.microsoft.com/azure/templates/microsoft.search/searchservices?pivots=deployment-language-bicep#sku).
 
-  ```shell
-  azd env set AZURE_SEARCH_SERVICE_SKU standard
-  ```
+```shell
+azd env set AZURE_SEARCH_SERVICE_SKU standard
+```
 
-  See the [Azure AI Search service limits documentation](https://learn.microsoft.com/azure/search/search-limits-quotas-capacity) for more details.
+See the [Azure AI Search service limits documentation](https://learn.microsoft.com/azure/search/search-limits-quotas-capacity) for more details.
 
 * If you see errors about search service capacity being exceeded, you may find it helpful to increase
 the number of replicas by changing `searchServiceReplicaCount` in `infra/main.bicep`
@@ -68,12 +72,12 @@ or manually scaling it from the Azure Portal.
 ## Additional security measures
 
 * **Authentication**: By default, the deployed app is publicly accessible.
-  We recommend restricting access to authenticated users.
-  See [Enabling authentication](./deploy_features.md#enabling-authentication) to learn how to enable authentication.
+We recommend restricting access to authenticated users.
+See [Enabling authentication](./deploy_features.md#enabling-authentication) to learn how to enable authentication.
 * **Networking**: We recommend deploying inside a Virtual Network. If the app is only for
-  internal enterprise use, use a private DNS zone. Also consider using Azure API Management (APIM)
-  for firewalls and other forms of protection.
-  For more details, read [Azure OpenAI Landing Zone reference architecture](https://techcommunity.microsoft.com/blog/azurearchitectureblog/azure-openai-landing-zone-reference-architecture/3882102).
+internal enterprise use, use a private DNS zone. Also consider using Azure API Management (APIM)
+for firewalls and other forms of protection.
+For more details, read [Azure OpenAI Landing Zone reference architecture](https://techcommunity.microsoft.com/blog/azurearchitectureblog/azure-openai-landing-zone-reference-architecture/3882102).
 
 ## Evaluation
 

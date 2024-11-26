@@ -36,16 +36,16 @@
       "value": "${AZURE_OPENAI_EMD_DEPLOYMENT_SKU=Standard}"
     },
     "openAiChatModel": {
-      "value": "${AZURE_OPENAI_CHAT_MODEL=gpt-4}"
+      "value": "${AZURE_OPENAI_CHAT_MODEL=gpt-4o-mini}"
     },
     "openAiEmbedModel": {
       "value": "${AZURE_OPENAI_EMB_MODEL_NAME=text-embedding-3-large}"
     },
     "openAiChatDeploymentVersion": {
-      "value": "${AZURE_OPENAI_CHAT_DEPLOYMENT_VERSION=turbo-2024-04-09}"
+      "value": "${AZURE_OPENAI_CHAT_DEPLOYMENT_VERSION=2024-07-18}"
     },
     "openAiChatDeployment": {
-      "value": "${AZURE_OPENAI_CHAT_DEPLOYMENT=gpt-4}"
+      "value": "${AZURE_OPENAI_CHAT_DEPLOYMENT=gpt-4o-mini}"
     },
     "openAiChatVoiceChoice": {
       "value": "${AZURE_OPENAI_CHAT_VOICE_CHOICE=alloy}"

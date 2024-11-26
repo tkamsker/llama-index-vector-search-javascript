@@ -4,10 +4,11 @@
 This document covers optional features that can be enabled in the deployed Azure resources.
 You should typically enable these features before running `azd up`. Once you've set them, return to the [deployment steps](../README.md#deploying).
 
-* [Using GPT-4](#using-gpt-4)
-* [Using text-embedding-3 models](#using-text-embedding-3-models)
-* [Enabling authentication](#enabling-authentication)
-* [Adding an OpenAI load balancer](#adding-an-openai-load-balancer)
+- [Enabling optional features](#enabling-optional-features)
+  - [Using GPT-4](#using-gpt-4)
+  - [Using text-embedding-3 models](#using-text-embedding-3-models)
+  - [Enabling authentication](#enabling-authentication)
+  - [Adding an OpenAI load balancer](#adding-an-openai-load-balancer)
 
 ## Using GPT-4
 
@@ -19,73 +20,73 @@ Execute the following commands inside your terminal:
 
 1. To set the name of the deployment, run this command with a unique name in your Azure OpenAI account. You can use any deployment name, as long as it's unique in your Azure OpenAI account.
 
-    ```bash
-    azd env set AZURE_OPENAI_CHAT_DEPLOYMENT <your-deployment-name>
-    ```
+```bash
+azd env set AZURE_OPENAI_CHAT_DEPLOYMENT <your-deployment-name>
+```
 
-    For example:
+For example:
 
-    ```bash
-    azd env set AZURE_OPENAI_CHAT_DEPLOYMENT chat4
-    ```
+```bash
+azd env set AZURE_OPENAI_CHAT_DEPLOYMENT chat4
+```
 
 1. To set the GPT model name to a **gpt-4**, **gpt-4o**, or **gpt-4o mini** version from the [available models](https://learn.microsoft.com/azure/ai-services/openai/concepts/models), run this command with the appropriate GPT model name.
 
-    For GPT-4:
+For GPT-4:
 
-    ```bash
-    azd env set AZURE_OPENAI_CHATGPT_MODEL gpt-4
-    ```
+```bash
+azd env set AZURE_OPENAI_CHATGPT_MODEL gpt-4
+```
 
-    For GPT-4o:
+For GPT-4o:
 
-    ```bash
-    azd env set AZURE_OPENAI_CHATGPT_MODEL gpt-4o
-    ```
+```bash
+azd env set AZURE_OPENAI_CHATGPT_MODEL gpt-4o
+```
 
-    For GPT-4o mini:
+For GPT-4o mini:
 
-    ```bash
-    azd env set AZURE_OPENAI_CHATGPT_MODEL gpt-4o-mini
-    ```
+```bash
+azd env set AZURE_OPENAI_CHATGPT_MODEL gpt-4o-mini
+```
 
 1. To set the Azure OpenAI deployment SKU name, run this command with [the desired SKU name](https://learn.microsoft.com/azure/ai-services/openai/how-to/deployment-types#deployment-types).
 
-    ```bash
-    azd env set AZURE_OPENAI_CHAT_DEPLOYMENT_SKU GlobalStandard
-    ```
+```bash
+azd env set AZURE_OPENAI_CHAT_DEPLOYMENT_SKU GlobalStandard
+```
 
 1. To set the Azure OpenAI deployment capacity, run this command with the desired capacity.
 
-    ```bash
-    azd env set AZURE_OPENAI_CHAT_DEPLOYMENT_CAPACITY 10
-    ```
+```bash
+azd env set AZURE_OPENAI_CHAT_DEPLOYMENT_CAPACITY 10
+```
 
 1. To set the Azure OpenAI deployment version from the [available versions](https://learn.microsoft.com/azure/ai-services/openai/concepts/models), run this command with the appropriate version.
 
-    For GPT-4:
+For GPT-4:
 
-    ```bash
-    azd env set AZURE_OPENAI_CHAT_DEPLOYMENT_VERSION turbo-2024-04-09
-    ```
+```bash
+azd env set AZURE_OPENAI_CHAT_DEPLOYMENT_VERSION turbo-2024-04-09
+```
 
-    For GPT-4o:
+For GPT-4o:
 
-    ```bash
-    azd env set AZURE_OPENAI_CHAT_DEPLOYMENT_VERSION 2024-05-13
-    ```
+```bash
+azd env set AZURE_OPENAI_CHAT_DEPLOYMENT_VERSION 2024-05-13
+```
 
-    For GPT-4o mini:
+For GPT-4o mini:
 
-    ```bash
-    azd env set AZURE_OPENAI_CHAT_DEPLOYMENT_VERSION 2024-07-18
-    ```
+```bash
+azd env set AZURE_OPENAI_CHAT_DEPLOYMENT_VERSION 2024-07-18
+```
 
 1. To update the deployment with the new parameters, run this command.
 
-    ```bash
-    azd up
-    ```
+```bash
+azd up
+```
 
 > [!NOTE]
 > To revert back to GPT 3.5, run the following commands:
@@ -105,25 +106,25 @@ By default, the deployed Azure web app uses the `text-embedding-ada-002` embeddi
 
 1. Run one of the following commands to set the desired model:
 
-    ```shell
-    azd env set AZURE_OPENAI_EMB_MODEL_NAME text-embedding-3-small
-    ```
+```shell
+azd env set AZURE_OPENAI_EMB_MODEL_NAME text-embedding-3-small
+```
 
-    ```shell
-    azd env set AZURE_OPENAI_EMB_MODEL_NAME text-embedding-3-large
-    ```
+```shell
+azd env set AZURE_OPENAI_EMB_MODEL_NAME text-embedding-3-large
+```
 
 2. Specify the desired dimensions of the model: (from 256-3072, model dependent)
 
-    ```shell
-    azd env set AZURE_OPENAI_EMB_DIMENSIONS 256
-    ```
+```shell
+azd env set AZURE_OPENAI_EMB_DIMENSIONS 256
+```
 
 3. Set the model version to "1" (the only version as of March 2024):
 
-    ```shell
-    azd env set AZURE_OPENAI_EMB_DEPLOYMENT_VERSION 1
-    ```
+```shell
+azd env set AZURE_OPENAI_EMB_DEPLOYMENT_VERSION 1
+```
 
 4. When prompted during `azd up`, make sure to select a region for the OpenAI resource group location that supports the text-embedding-3 models. There are [limited regions available](https://learn.microsoft.com/azure/ai-services/openai/concepts/models#embeddings-models).
 
@@ -143,5 +144,5 @@ To then limit access to a specific set of users or groups, you can follow the st
 
 ## Adding an OpenAI load balancer
 
-As discussed in more details in our [productionizing guide](./productionizing.md), you may want to consider implementing a load balancer between OpenAI instances if you are consistently going over the TPM limit.
+As discussed in more details in our [productionizing guide](./prod.md), you may want to consider implementing a load balancer between OpenAI instances if you are consistently going over the TPM limit.
 Fortunately, this repository is designed for easy integration with other repositories that create load balancers for OpenAI instances.
