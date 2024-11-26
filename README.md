@@ -22,13 +22,12 @@ This solution creates a ChatGPT-like, Retrieval Augmented Generation (RAG) agent
 
 Learn more about developing AI apps using [Azure AI Services](https://aka.ms/azai).
 
-
 [![Open in GitHub Codespaces](https://img.shields.io/static/v1?style=for-the-badge&label=GitHub+Codespaces&message=Open&color=brightgreen&logo=github)](https://github.com/codespaces/new?hide_repo_select=true&ref=main&repo=890591076&machine=standardLinux32gb&devcontainer_path=.devcontainer%2Fdevcontainer.json&location=WestUs2)
 [![Open in Dev Containers](https://img.shields.io/static/v1?style=for-the-badge&label=Dev%20Containers&message=Open&color=blue&logo=visualstudiocode)](https://vscode.dev/redirect?url=vscode://ms-vscode-remote.remote-containers/cloneInVolume?url=https://github.com/azure-samples/llamaindex-search-javascript)
 
 ## Important Security Notice
 
-This template, the application code and configuration it contains, has been built to showcase Microsoft Azure specific services and tools. We strongly advise our customers not to make this code part of their production environments without implementing or enabling additional security features. See our [productionizing guide](docs/productionizing.md) for tips, and consult the [Azure OpenAI Landing Zone reference architecture](https://techcommunity.microsoft.com/blog/azurearchitectureblog/azure-openai-landing-zone-reference-architecture/3882102) for more best practices.
+This template, the application code and configuration it contains, has been built to showcase Microsoft Azure specific services and tools. We strongly advise our customers not to make this code part of their production environments without implementing or enabling additional security features. See our [productionizing guide](docs/prod.md) for tips, and consult the [Azure OpenAI Landing Zone reference architecture](https://techcommunity.microsoft.com/blog/azurearchitectureblog/azure-openai-landing-zone-reference-architecture/3882102) for more best practices.
 
 ## Table of Contents
 
@@ -44,7 +43,6 @@ This template, the application code and configuration it contains, has been buil
 - [Using the app](#using-the-app)
 - [Clean up](#clean-up)
 - [Guidance](#guidance)
-  - [Resources](#resources)
 
 ![Chat screen](docs/images/llamaindex-search-javascript.png)
 
@@ -52,7 +50,7 @@ The repo includes sample data so it's ready to try end to end. In this sample ap
 
 ### Architecture Diagram
 
-![RAG Architecture](docs/images/appcomponents.png)
+![RAG Architecture](docs/images/llamaindex-search-javascript-diagram.png)
 
 ## Azure account requirements
 
@@ -76,7 +74,7 @@ However, you can try the [Azure pricing calculator](https://azure.com/e/a87a169b
 
 To reduce costs, you can switch to free SKUs for various services, but those SKUs have limitations.
 
-⚠️ To avoid unnecessary costs, remember to take down your app if it's no longer in use,
+ To avoid unnecessary costs, remember to take down your app if it's no longer in use,
 either by deleting the resource group in the Portal or running `azd down`.
 
 ## Getting Started
@@ -120,7 +118,7 @@ A related option is VS Code Dev Containers, which will open the project in your 
     azd init -t llamaindex-search-javascript
     ```
 
-    Note that this command will initialize a git repository, so you do not need to clone this repository.
+Note that this command will initialize a git repository, so you do not need to clone this repository.
 
 ## Deploying
 
@@ -159,13 +157,13 @@ It will look like the following:
 
 ### Deploying again
 
-If you've only changed the Next.js app code in the `app` folder, then you don't need to re-provision the Azure resources. You can just run:
+If you've only changed the Next.js app code in the [`app`](./app/) folder, then you don't need to re-provision the Azure resources. You can just run:
 
 ```shell
 azd deploy
 ```
 
-If you've changed the infrastructure files (`infra` folder or `azure.yaml`), then you'll need to re-provision the Azure resources. You can do that by running:
+If you've changed the infrastructure files ([`infra`](./infra/) folder or [`azure.yaml`](./azure.yaml)), then you'll need to re-provision the Azure resources. You can do that by running:
 
 ```shell
 azd up
@@ -183,7 +181,7 @@ Then, install the project dependencies:
 npm install
 ```
 
-Next, generate the embeddings of the documents in the `./data` directory:
+Next, generate the embeddings of the documents in the [./data](./data) directory:
 
 ```
 npm run generate
@@ -236,7 +234,7 @@ docker run \
 ## Using the app
 
 - In Azure: navigate to the Azure app deployed by `azd`. The URL is printed out when `azd` completes (as "Endpoint"), or you can find it in the Azure portal.
-- Running locally: navigate to http://localhost:3000
+- Running locally: navigate to [http://localhost:3000](http://localhost:3000)
 
 ## Clean up
 
@@ -256,18 +254,6 @@ You can find extensive documentation in the [docs](docs/README.md) folder:
 
 - Deploying:
   - [Troubleshooting deployment](docs/deploy_troubleshooting.md)
-    - [Debugging the app on App Service](docs/appservice.md)
   - [Deploying with azd: deep dive and CI/CD](docs/azd.md)
-  - [Deploying with existing Azure resources](docs/deploy_existing.md)
-  - [Deploying from a free account](docs/deploy_lowcost.md)
-  - [Enabling optional features](docs/deploy_features.md)
-    - [Login and access control](docs/login_and_acl.md)
-    - [GPT-4 Turbo with Vision](docs/gpt4v.md)
-    - [Private endpoints](docs/deploy_private.md)
-  - [Sharing deployment environments](docs/sharing_environments.md)
-- [Local development](docs/localdev.md)
-- [Customizing the app](docs/customization.md)
-- [Data ingestion](docs/data_ingestion.md)
-- [Monitoring with Application Insights](docs/monitoring.md)
-- [Productionizing](docs/productionizing.md)
-- [Alternative RAG chat samples](docs/other_samples.md)
+  - [Enabling optional features](docs/features.md)
+- [Productionizing](docs/prod.md)
