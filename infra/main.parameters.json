@@ -39,7 +39,7 @@
       "value": "${AZURE_OPENAI_CHAT_MODEL=gpt-4o-mini}"
     },
     "openAiEmbedModel": {
-      "value": "${AZURE_OPENAI_EMB_MODEL_NAME=text-embedding-3-large}"
+      "value": "${AZURE_OPENAI_EMB_MODEL_NAME=text-embedding-ada-002}"
     },
     "openAiChatDeploymentVersion": {
       "value": "${AZURE_OPENAI_CHAT_DEPLOYMENT_VERSION=2024-07-18}"
@@ -67,6 +67,9 @@
     },
     "searchEmbeddingField": {
       "value": "${AZURE_AI_SEARCH_EMBEDDING_FIELD=embedding}"
+    },
+    "searchEmbeddingDimensionality": {
+      "value": "${AZURE_AI_SEARCH_EMBEDDING_DIMENSIONALITY=3072}"
     },
     "searchIdField": {
       "value": "${AZURE_AI_SEARCH_ID_FIELD=id}"

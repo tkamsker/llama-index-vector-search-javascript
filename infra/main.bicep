@@ -62,6 +62,7 @@ param searchMetadataField string
 param searchDocIdField string
 param searchIdField string
 param searchEmbeddingField string
+param searchEmbeddingDimensionality int
 param searchUseVectorQuery bool
 
 param storageAccountName string = ''
@@ -77,12 +78,12 @@ param openAiEndpoint string = ''
 param openAiChatDeployment string = 'gpt-4o-mini'
 param openAiChatModel string = 'gpt-4o-mini'
 param openAiChatDeploymentVersion string = '2024-07-18'
-param openAiEmbedModel string = 'text-embedding-3-large'
-param openAiEmbedModelVersion string = '1'
+param openAiEmbedModel string = 'text-embedding-ada-002'
+param openAiEmbedModelVersion string = '2'
 param openAiChatVoiceChoice string = 'alloy'
 param openAiChatSkuName string = 'Standard'
 param openAiEmbedSkuName string = 'Standard'
-param chatDeploymentCapacity int = 1
+param chatDeploymentCapacity int = 30
 param openAiEmbeddingDeploymentCapacity int = 30
 
 // leave this empty will disable file URLs generated (in the UI)
@@ -223,6 +224,7 @@ module acaBackend 'core/host/container-app-upsert.bicep' = {
       AZURE_AI_SEARCH_METADATA_FIELD: searchMetadataField
       AZURE_AI_SEARCH_DOC_ID_FIELD: searchDocIdField
       AZURE_AI_SEARCH_EMBEDDING_FIELD: searchEmbeddingField
+      AZURE_AI_SEARCH_EMBEDDING_DIMENSIONALITY: searchEmbeddingDimensionality
       AZURE_AI_SEARCH_USE_VECTOR_QUERY: searchUseVectorQuery
       AZURE_OPENAI_ENDPOINT: reuseExistingOpenAi ? openAiEndpoint : openAi.outputs.endpoint
       AZURE_OPENAI_CHAT_DEPLOYMENT: reuseExistingOpenAi ? openAiChatDeployment : openAiDeployments[0].name
@@ -452,6 +454,7 @@ output AZURE_AI_SEARCH_METADATA_FIELD string = searchMetadataField
 output AZURE_AI_SEARCH_ID_FIELD string = searchIdField
 output AZURE_AI_SEARCH_DOC_ID_FIELD string = searchDocIdField
 output AZURE_AI_SEARCH_EMBEDDING_FIELD string = searchEmbeddingField
+output AZURE_AI_SEARCH_EMBEDDING_DIMENSIONALITY int = searchEmbeddingDimensionality
 output AZURE_AI_SEARCH_USE_VECTOR_QUERY bool = searchUseVectorQuery
 
 output AZURE_STORAGE_ENDPOINT string = storage.outputs.primaryBlobEndpoint
