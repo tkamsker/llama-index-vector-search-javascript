@@ -110,11 +110,11 @@ A related option is VS Code Dev Containers, which will open the project in your 
 
 1. Install the required tools:
 
-    - [Azure Developer CLI](https://aka.ms/azure-dev/install)
-    - [Node.js 20+](https://nodejs.org/download/)
-    - [Git](https://git-scm.com/downloads)
-    - [Powershell 7+ (pwsh)](https://github.com/powershell/powershell) - For Windows users only.
-      - **Important**: Ensure you can run `pwsh.exe` from a PowerShell terminal. If this fails, you likely need to upgrade PowerShell.
+- [Azure Developer CLI](https://aka.ms/azure-dev/install)
+- [Node.js 20+](https://nodejs.org/download/)
+- [Git](https://git-scm.com/downloads)
+- [Powershell 7+ (pwsh)](https://github.com/powershell/powershell) - For Windows users only.
+  - **Important**: Ensure you can run `pwsh.exe` from a PowerShell terminal. If this fails, you likely need to upgrade PowerShell.
 
 2. Create a new folder and switch to it in the terminal.
 3. Run this command to download the project code:
@@ -151,10 +151,20 @@ azd env new
 Enter a name that will be used for the resource group.
 This will create a new folder in the `.azure` folder, and set it as the active environment for any calls to `azd` going forward.
 
-Package, provision and deploy this project to Azure:
+Provision the infrastructure needed to run the application.
 
 ```shell
-azd up
+azd provision
+```
+
+> [!IMPORTANT]
+> This application specifically requires some environment variables to be available during the packaging phase. This is why we need to provision the infra first before packaging and deploying the app. In most cases, simply running 'azd up' will package, provision and deploy your apps.
+
+Package and deploy the app to Azure:
+
+```shell
+azd package
+azd deploy
 ```
 
 > [!NOTE]

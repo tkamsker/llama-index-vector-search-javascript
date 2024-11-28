@@ -85,7 +85,8 @@ param openAiEmbedSkuName string = 'Standard'
 param chatDeploymentCapacity int = 1
 param openAiEmbeddingDeploymentCapacity int = 30
 
-param llamaIndexFileserverUrlPrefix string = 'http://localhost/api/files'
+// leave this empty will disable file URLs generated (in the UI)
+param llamaIndexFileserverUrlPrefix string = ''
 param llamaIndexCacheDir string = '.cache'
 param llamaIndexSystemPrompt string = '''
 you are an assistant. Always use data_query_engine to answer the user\'s questions, and query for documents from your data source
@@ -283,7 +284,8 @@ module openAi 'br/public:avm/res/cognitive-services/account:0.8.0' = if (!reuseE
       : '${abbrs.cognitiveServicesAccounts}${resourceToken}'
     sku: 'S0'
     deployments: openAiDeployments
-    disableLocalAuth: true
+    disableLocalAuth: false
+    restrictOutboundNetworkAccess: false
     publicNetworkAccess: 'Enabled'
     networkAcls: {
       defaultAction: 'Allow'
@@ -423,6 +425,7 @@ module openAiRoleSearchService 'core/security/role.bicep' = if (!reuseExistingSe
 // If detected, it will be used to authenticate the user 
 // using a user-assigned managed identity on Azure.
 // However, this is not supported in local development.
+output AZURE_CLIENT_ID string = acaIdentity.outputs.clientId
 
 output AZURE_LOCATION string = location
 output AZURE_TENANT_ID string = tenantId
