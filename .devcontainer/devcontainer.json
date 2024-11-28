@@ -3,15 +3,19 @@
   "features": {
     "ghcr.io/devcontainers-contrib/features/turborepo-npm:1": {},
     "ghcr.io/devcontainers-contrib/features/typescript:2": {},
-    "ghcr.io/devcontainers/features/python:1": {
-      "version": "3.11",
-      "toolsToInstall": [
-        "flake8",
-        "black",
-        "mypy",
-        "poetry"
-      ]
-    }
+    "ghcr.io/devcontainers/features/node:1": {
+      "version": "20"
+    },
+    "ghcr.io/devcontainers/features/docker-in-docker:2": {
+      "version": 20,
+      "moby": "false"
+    },
+    "ghcr.io/devcontainers/features/powershell:1": {},
+    "ghcr.io/devcontainers/features/azure-cli:1": {
+      "version": "latest",
+      "installBicep": true
+    },
+    "ghcr.io/azure/azure-dev/azd:latest": {}
   },
   "customizations": {
     "codespaces": {
@@ -22,25 +26,17 @@
     "vscode": {
       "extensions": [
         "ms-vscode.typescript-language-features",
+        "ms-azuretools.vscode-azure-github-copilot",
         "esbenp.prettier-vscode",
-        "ms-python.python",
-        "ms-python.black-formatter",
-        "ms-python.vscode-flake8",
-        "ms-python.vscode-pylance"
-      ],
-      "settings": {
-        "python.formatting.provider": "black",
-        "python.languageServer": "Pylance",
-        "python.analysis.typeCheckingMode": "basic"
-      }
+        "ms-azuretools.azure-dev",
+        "ms-azuretools.vscode-bicep",
+        "ms-azuretools.vscode-docker",
+        "GitHub.copilot"
+      ]
     }
-  },
-  "containerEnv": {
-    "POETRY_VIRTUALENVS_CREATE": "false"
   },
   "forwardPorts": [
     3000,
-    8000
   ],
-  "postCreateCommand": "npm install"
+  "postCreateCommand": "pnpm install"
 }
