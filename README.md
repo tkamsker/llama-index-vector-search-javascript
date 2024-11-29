@@ -13,7 +13,7 @@ products:
 - aca
 - azure
 page_type: sample
-urlFragment: llamaindex-search-javascript
+urlFragment: llama-index-vector-search-javascript
 ----->
 
 ## LlamaIndex RAG chat app with Azure OpenAI and Azure AI Search (JavaScript)
@@ -23,7 +23,7 @@ This solution creates a ChatGPT-like, Retrieval Augmented Generation (RAG) agent
 Learn more about developing AI apps using [Azure AI Services](https://aka.ms/azai).
 
 [![Open in GitHub Codespaces](https://img.shields.io/static/v1?style=for-the-badge&label=GitHub+Codespaces&message=Open&color=brightgreen&logo=github)](https://github.com/codespaces/new?hide_repo_select=true&ref=main&repo=890591076&machine=standardLinux32gb&devcontainer_path=.devcontainer%2Fdevcontainer.json&location=WestUs2)
-[![Open in Dev Containers](https://img.shields.io/static/v1?style=for-the-badge&label=Dev%20Containers&message=Open&color=blue&logo=visualstudiocode)](https://vscode.dev/redirect?url=vscode://ms-vscode-remote.remote-containers/cloneInVolume?url=https://github.com/azure-samples/llamaindex-search-javascript)
+[![Open in Dev Containers](https://img.shields.io/static/v1?style=for-the-badge&label=Dev%20Containers&message=Open&color=blue&logo=visualstudiocode)](https://vscode.dev/redirect?url=vscode://ms-vscode-remote.remote-containers/cloneInVolume?url=https://github.com/azure-samples/llama-index-vector-search-javascript)
 
 ## Important Security Notice
 
@@ -49,13 +49,13 @@ This template, the application code and configuration it contains, has been buil
 - [Clean up](#clean-up)
 - [Guidance](#guidance)
 
-![Chat screen](docs/images/llamaindex-search-javascript.png)
+![Chat screen](docs/images/llama-index-vector-search-javascript.png)
 
 The repo includes sample data so it's ready to try end to end. In this sample application we use one of Paul Graham's essays, [What I Worked On](https://paulgraham.com/worked.html), and the experience allows you to ask questions about this essay.
 
 ### Architecture Diagram
 
-![RAG Architecture](docs/images/llamaindex-search-javascript-diagram.png)
+![RAG Architecture](docs/images/llama-index-vector-search-javascript-diagram.png)
 
 ## Azure account requirements
 
@@ -120,7 +120,7 @@ A related option is VS Code Dev Containers, which will open the project in your 
 3. Run this command to download the project code:
 
 ```shell
-azd init -t llamaindex-search-javascript
+azd init -t llama-index-vector-search-javascript
 ```
 
 > [!NOTE] 
@@ -174,7 +174,7 @@ After the application has been successfully deployed you will see a URL printed 
 
 It will look like the following:
 
-!['Output from running azd up'](docs/images/llamaindex-search-javascript-endpoint.png)
+!['Output from running azd up'](docs/images/llama-index-vector-search-javascript-endpoint.png)
 
 > [!NOTE]
 > It may take 5-10 minutes after you see 'SUCCESS' for the application to be fully deployed.
@@ -231,7 +231,7 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 1. Build an image for the Next.js app:
 
 ```
-docker build -t llamaindex-search-javascript .
+docker build -t llama-index-vector-search-javascript .
 ```
 
 1. Generate embeddings:
@@ -245,7 +245,7 @@ docker run \
   -v $(pwd)/config:/app/config \
   -v $(pwd)/data:/app/data \
   -v $(pwd)/cache:/app/cache \ # Use your file system to store the vector database
-  llamaindex-search-javascript \
+  llama-index-vector-search-javascript \
   npm run generate
 ```
 
@@ -258,7 +258,7 @@ docker run \
   -v $(pwd)/config:/app/config \
   -v $(pwd)/cache:/app/cache \ # Use your file system to store gea vector database
   -p 3000:3000 \
-  llamaindex-search-javascript
+  llama-index-vector-search-javascript
 ```
 
 ## Using the app
