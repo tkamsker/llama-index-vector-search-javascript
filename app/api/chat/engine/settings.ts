@@ -136,7 +136,7 @@ export const initSettings = async () => {
       // FIXME: import IndexManagement.CREATE_IF_NOT_EXISTS from 'llamaindex'
       // indexManagement: IndexManagement.CREATE_IF_NOT_EXISTS,
       indexManagement: "CreateIfNotExists" as IndexManagement,
-      embeddingDimensionality: Number(process.env.AZURE_AI_SEARCH_EMBEDDING_DIMENSIONALITY) ?? 3072,
+      embeddingDimensionality: Number(process.env.AZURE_AI_SEARCH_EMBEDDING_DIMENSIONALITY) ?? 1536,
       languageAnalyzer: KnownAnalyzerNames.EnLucene,
       // store vectors on disk
       vectorAlgorithmType: KnownVectorSearchAlgorithmKind.ExhaustiveKnn,

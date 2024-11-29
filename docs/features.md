@@ -114,7 +114,7 @@ azd env set AZURE_OPENAI_EMB_MODEL_NAME text-embedding-3-small
 azd env set AZURE_OPENAI_EMB_MODEL_NAME text-embedding-3-large
 ```
 
-2. Specify the desired dimensions of the model: (from 256-3072, model dependent)
+2. Specify the desired dimensions of the model: (from 256-1536, model dependent)
 
 ```shell
 azd env set AZURE_OPENAI_EMB_DIMENSIONS 256

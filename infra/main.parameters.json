@@ -69,7 +69,7 @@
       "value": "${AZURE_AI_SEARCH_EMBEDDING_FIELD=embedding}"
     },
     "searchEmbeddingDimensionality": {
-      "value": "${AZURE_AI_SEARCH_EMBEDDING_DIMENSIONALITY=3072}"
+      "value": "${AZURE_AI_SEARCH_EMBEDDING_DIMENSIONALITY=1536}"
     },
     "searchIdField": {
       "value": "${AZURE_AI_SEARCH_ID_FIELD=id}"
