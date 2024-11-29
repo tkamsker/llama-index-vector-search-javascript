@@ -1,4 +1,5 @@
 # Run when commits are pushed to main
+name: "Azure Dev"
 on:
   workflow_dispatch:
   push:
