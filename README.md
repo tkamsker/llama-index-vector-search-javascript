@@ -1,4 +1,5 @@
-<!-----
+<!--
+---
 name: LlamaIndex RAG chat app with Azure OpenAI and Azure AI Search (JavaScript)
 description: Chat with your domain data using LlamaIndex, Azure OpenAI and Azure AI Search.
 languages:
@@ -14,7 +15,8 @@ products:
 - azure
 page_type: sample
 urlFragment: llama-index-vector-search-javascript
------>
+---
+-->
 
 ## LlamaIndex RAG chat app with Azure OpenAI and Azure AI Search (JavaScript)
 
