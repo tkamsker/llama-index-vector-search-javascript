@@ -51,13 +51,13 @@ This template, the application code and configuration it contains, has been buil
 - [Clean up](#clean-up)
 - [Guidance](#guidance)
 
-![Chat screen](docs/images/llama-index-vector-search-javascript.png)
+![Chat screen](docs/images/llamaindex-search-javascript.png)
 
 The repo includes sample data so it's ready to try end to end. In this sample application we use one of Paul Graham's essays, [What I Worked On](https://paulgraham.com/worked.html), and the experience allows you to ask questions about this essay.
 
 ### Architecture Diagram
 
-![RAG Architecture](docs/images/llama-index-vector-search-javascript-diagram.png)
+![RAG Architecture](docs/images/llamaindex-search-javascript-diagram.png)
 
 ## Azure account requirements
 
@@ -176,7 +176,7 @@ After the application has been successfully deployed you will see a URL printed 
 
 It will look like the following:
 
-!['Output from running azd up'](docs/images/llama-index-vector-search-javascript-endpoint.png)
+!['Output from running azd up'](docs/images/llamaindex-search-javascript-endpoint.png)
 
 > [!NOTE]
 > It may take 5-10 minutes after you see 'SUCCESS' for the application to be fully deployed.
