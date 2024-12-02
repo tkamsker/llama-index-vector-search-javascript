@@ -11,7 +11,7 @@ languages:
 products:
 - azure-openai
 - azure-cognitive-search
-- aca
+- azure-container-apps
 - azure
 page_type: sample
 urlFragment: llama-index-vector-search-javascript
