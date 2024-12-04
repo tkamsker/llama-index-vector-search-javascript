@@ -104,7 +104,7 @@ A related option is VS Code Dev Containers, which will open the project in your 
 
 1. Start Docker Desktop (install it if not already installed)
 2. Open the project:
-    [![Open in Dev Containers](https://img.shields.io/static/v1?style=for-the-badge&label=Dev%20Containers&message=Open&color=blue&logo=visualstudiocode)](https://vscode.dev/redirect?url=vscode://ms-vscode-remote.remote-containers/cloneInVolume?url=https://github.com/azure-samples/azure-search-openai-demo)
+    [![Open in Dev Containers](https://img.shields.io/static/v1?style=for-the-badge&label=Dev%20Containers&message=Open&color=blue&logo=visualstudiocode)](https://vscode.dev/redirect?url=vscode://ms-vscode-remote.remote-containers/cloneInVolume?url=https://github.com/azure-samples/llama-index-vector-search-javascript)
 
 3. In the VS Code window that opens, once the project files show up (this may take several minutes), open a terminal window.
 
@@ -236,7 +236,7 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 docker build -t llama-index-vector-search-javascript .
 ```
 
-1. Generate embeddings:
+2. Generate embeddings:
 
 Parse the data and generate the vector embeddings if the `./data` folder exists - otherwise, skip this step:
 
@@ -251,7 +251,7 @@ docker run \
   npm run generate
 ```
 
-1. Start the app:
+3. Start the app:
 
 ```
 docker run \
