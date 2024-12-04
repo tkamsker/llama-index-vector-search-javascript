@@ -227,42 +227,6 @@ npm run dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-
-### Using Docker (optional)
-
-1. Build an image for the Next.js app:
-
-```
-docker build -t llama-index-vector-search-javascript .
-```
-
-2. Generate embeddings:
-
-Parse the data and generate the vector embeddings if the `./data` folder exists - otherwise, skip this step:
-
-```
-docker run \
-  --rm \
-  -v $(pwd)/.env:/app/.env \ # Use ENV variables and configuration from your file-system
-  -v $(pwd)/config:/app/config \
-  -v $(pwd)/data:/app/data \
-  -v $(pwd)/cache:/app/cache \ # Use your file system to store the vector database
-  llama-index-vector-search-javascript \
-  npm run generate
-```
-
-3. Start the app:
-
-```
-docker run \
-  --rm \
-  -v $(pwd)/.env:/app/.env \ # Use ENV variables and configuration from your file-system
-  -v $(pwd)/config:/app/config \
-  -v $(pwd)/cache:/app/cache \ # Use your file system to store gea vector database
-  -p 3000:3000 \
-  llama-index-vector-search-javascript
-```
-
 ## Using the app
 
 - In Azure: navigate to the Azure app deployed by `azd`. The URL is printed out when `azd` completes (as "Endpoint"), or you can find it in the Azure portal.
